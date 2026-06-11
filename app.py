@@ -9,16 +9,21 @@ url = st.text_input("Link do vídeo:")
 if st.button("Gerar Arquivo"):
     if url:
         try:
-            # Pega o ID
+            # Limpa espaços acidentais
+            url = url.strip()
+            
+            # Pega o ID de forma mais robusta
             if "v=" in url:
                 video_id = url.split("v=")[1].split("&")[0]
             elif "youtu.be/" in url:
                 video_id = url.split("youtu.be/")[1].split("?")[0]
+            elif "shorts/" in url:
+                video_id = url.split("shorts/")[1].split("?")[0]
             else:
                 video_id = url
                 
-            # Baixa e formata
-            transcricao = YouTubeTranscriptApi.get_transcript(video_id, languages=['pt', 'en'])
+            # Baixa e formata (Adicionado 'pt-BR')
+            transcricao = YouTubeTranscriptApi.get_transcript(video_id, languages=['pt', 'pt-BR', 'en'])
             texto_final = "\n".join([linha['text'] for linha in transcricao])
             
             st.success("Sucesso! Clique abaixo para baixar.")
@@ -32,4 +37,5 @@ if st.button("Gerar Arquivo"):
             )
             
         except Exception as e:
-            st.error(f"Erro: Verifique o link ou se o vídeo possui legendas ocultas.")
+            # Agora ele vai imprimir exatamente qual é o erro
+            st.error(f"Detalhe do erro: {e}")
