@@ -23,7 +23,7 @@ if st.button("Gerar Arquivo"):
                 video_id = url
                 
             # Baixa e formata (Adicionado 'pt-BR')
-            transcricao = YouTubeTranscriptApi.get_transcript(video_id, languages=['pt', 'pt-BR', 'en'])
+            transcricao = YouTubeTranscriptApi.fetch(video_id, languages=['pt', 'pt-BR', 'en'])
             texto_final = "\n".join([linha['text'] for linha in transcricao])
             
             st.success("Sucesso! Clique abaixo para baixar.")
